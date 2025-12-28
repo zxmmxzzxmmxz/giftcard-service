@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  backend:
+    container_name: giftcard-backend
+    build:
+      context: ./backend
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    environment:
+      - TZ=America/Vancouver
+
+  frontend:
+    container_name: giftcard-frontend
+    build:
+      context: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
