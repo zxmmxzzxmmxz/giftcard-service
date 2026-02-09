@@ -15,5 +15,5 @@ WORKDIR /app
 # 不写死 jar 名称：复制生成出来的主 jar
 COPY --from=build /workspace/target/app.jar /app/app.jar
 
-EXPOSE 8080
+EXPOSE 5091
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

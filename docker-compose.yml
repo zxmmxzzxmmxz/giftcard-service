@@ -10,7 +10,7 @@ services:
     volumes:
       - ./data:/app/data
     ports:
-      - "8080:8080"
+      - "5091:5091"
     restart: unless-stopped
     environment:
       - TZ=America/Vancouver
@@ -20,7 +20,8 @@ services:
     build:
       context: ./frontend
     ports:
-      - "80:80"
+      - "5092:5092"
     depends_on:
       - backend
     restart: unless-stopped
+
