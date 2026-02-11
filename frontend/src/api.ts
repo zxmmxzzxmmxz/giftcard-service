@@ -83,6 +83,19 @@ export const api = {
     deleteAnycard: (id: string) =>
         request<void>(`/api/anycards/${id}`, { method: "DELETE" }),
 
+    listWalmartGiftCards: () => request<any[]>("/api/walmart-giftcards"),
+    getWalmartGiftCard: (id: string) => request<any>(`/api/walmart-giftcards/${id}`),
+    createWalmartGiftCard: (payload: any) =>
+        request<any>("/api/walmart-giftcards", { method: "POST", body: JSON.stringify(payload) }),
+    updateWalmartGiftCard: (id: string, payload: any) =>
+        request<any>(`/api/walmart-giftcards/${id}`, { method: "PUT", body: JSON.stringify(payload) }),
+    deleteWalmartGiftCard: (id: string) =>
+        request<void>(`/api/walmart-giftcards/${id}`, { method: "DELETE" }),
+
+    walmartEmailListenerStatus: () => request<any>("/api/walmart-giftcards/email-listener/status"),
+    walmartEmailListenerStart: () => request<any>("/api/walmart-giftcards/email-listener/start", { method: "POST" }),
+    walmartEmailListenerStop: () => request<any>("/api/walmart-giftcards/email-listener/stop", { method: "POST" }),
+
     createTask: (payload: any) =>
         request<any>("/api/tasks/create", { method: "POST", body: JSON.stringify(payload) }),
 

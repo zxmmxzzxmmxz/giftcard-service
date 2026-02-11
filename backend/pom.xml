@@ -66,6 +66,13 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
+        <!-- Email (IMAP polling for Gmail) -->
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>jakarta.mail</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+
         <!-- Actuator (optional but handy) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

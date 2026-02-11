@@ -35,6 +35,15 @@ export type Anycard = {
     updatedAt: string;
 };
 
+export type WalmartGiftCard = {
+    id: string;
+    cardNumber: string;
+    pin: string;
+    balance: number;
+    createdAt: string;
+    updatedAt: string;
+};
+
 export type AutomationTask = {
     id: string;
     type: string;
