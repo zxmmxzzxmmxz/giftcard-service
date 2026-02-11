@@ -16,6 +16,9 @@ public class GiftCardAnycardEntity {
     @Column(name = "card_number", nullable = false)
     private String cardNumber;
 
+    @Column(name = "serial_number")
+    private String serialNumber;
+
     @Column(name = "pin")
     private String pin;
 
@@ -25,6 +28,9 @@ public class GiftCardAnycardEntity {
 
     @Column(name = "balance")
     private String balance;
+
+    @Column(name = "needs_redeem")
+    private Boolean needsRedeem;
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
@@ -51,6 +57,9 @@ public class GiftCardAnycardEntity {
     public String getCardNumber() { return cardNumber; }
     public void setCardNumber(String cardNumber) { this.cardNumber = cardNumber; }
 
+    public String getSerialNumber() { return serialNumber; }
+    public void setSerialNumber(String serialNumber) { this.serialNumber = serialNumber; }
+
     public String getPin() { return pin; }
     public void setPin(String pin) { this.pin = pin; }
 
@@ -60,7 +69,9 @@ public class GiftCardAnycardEntity {
     public String getBalance() { return balance; }
     public void setBalance(String balance) { this.balance = balance; }
 
+    public Boolean getNeedsRedeem() { return needsRedeem; }
+    public void setNeedsRedeem(Boolean needsRedeem) { this.needsRedeem = needsRedeem; }
+
     public Instant getCreatedAt() { return createdAt; }
     public Instant getUpdatedAt() { return updatedAt; }
 }
-

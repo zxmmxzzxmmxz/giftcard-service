@@ -22,3 +22,26 @@ export type Card = {
     data: Record<string, string>;
     createdAt?: string;
 };
+
+export type Anycard = {
+    id: string;
+    cardNumber: string;
+    serialNumber?: string | null;
+    pin?: string | null;
+    anycardType: string;
+    balance?: string | null;
+    needsRedeem: boolean;
+    createdAt: string;
+    updatedAt: string;
+};
+
+export type AutomationTask = {
+    id: string;
+    type: string;
+    status: string;
+    data: any;
+    result: any;
+    lastError?: string | null;
+    createdAt: string;
+    updatedAt: string;
+};

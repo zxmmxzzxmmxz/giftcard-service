@@ -13,7 +13,7 @@ public class AutomationTaskEntity {
     @Column(length = 36)
     private String id;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = TaskTypeConverter.class)
     @Column(name = "type", nullable = false)
     private TaskType type;
 

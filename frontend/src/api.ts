@@ -67,4 +67,25 @@ export const api = {
         request<any>(`/api/cards/${id}`, { method: "PUT", body: JSON.stringify(payload) }),
     deleteCard: (id: string) =>
         request<void>(`/api/cards/${id}`, { method: "DELETE" }),
+
+    listAnycards: (params?: { anycardType?: string; cardNumber?: string }) => {
+        const q = new URLSearchParams();
+        if (params?.anycardType) q.set("anycardType", params.anycardType);
+        if (params?.cardNumber) q.set("cardNumber", params.cardNumber);
+        const suffix = q.toString() ? `?${q.toString()}` : "";
+        return request<any[]>(`/api/anycards${suffix}`);
+    },
+    getAnycard: (id: string) => request<any>(`/api/anycards/${id}`),
+    createAnycard: (payload: any) =>
+        request<any>("/api/anycards", { method: "POST", body: JSON.stringify(payload) }),
+    updateAnycard: (id: string, payload: any) =>
+        request<any>(`/api/anycards/${id}`, { method: "PUT", body: JSON.stringify(payload) }),
+    deleteAnycard: (id: string) =>
+        request<void>(`/api/anycards/${id}`, { method: "DELETE" }),
+
+    createTask: (payload: any) =>
+        request<any>("/api/tasks/create", { method: "POST", body: JSON.stringify(payload) }),
+
+    listTasks: () => request<any[]>("/api/tasks"),
+    deleteTask: (id: string) => request<void>(`/api/tasks/${id}`, { method: "DELETE" }),
 };

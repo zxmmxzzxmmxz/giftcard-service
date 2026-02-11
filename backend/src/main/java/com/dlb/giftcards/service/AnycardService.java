@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
-import java.util.Locale;
+import java.util.Objects;
 
 @Service
 public class AnycardService {
@@ -38,29 +38,89 @@ public class AnycardService {
     }
 
     @Transactional
+    public GiftCardAnycardEntity create(
+            String cardNumber,
+            String serialNumber,
+            String pin,
+            AnycardType anycardType,
+            String balance,
+            Boolean needsRedeem
+    ) {
+        if (cardNumber == null || cardNumber.isBlank()) throw new IllegalArgumentException("cardNumber is required");
+        Objects.requireNonNull(anycardType, "anycardType");
+
+        repo.findByAnycardTypeAndCardNumber(anycardType, cardNumber).ifPresent((e) -> {
+            throw new IllegalArgumentException("Anycard already exists for this type + cardNumber");
+        });
+
+        GiftCardAnycardEntity e = new GiftCardAnycardEntity();
+        e.setCardNumber(cardNumber.trim());
+        e.setSerialNumber(serialNumber == null ? null : serialNumber.trim());
+        e.setPin(pin == null ? null : pin.trim());
+        e.setAnycardType(anycardType);
+        e.setBalance(balance == null ? null : balance.trim());
+        e.setNeedsRedeem(needsRedeem != null && needsRedeem);
+        return repo.save(e);
+    }
+
+    @Transactional
+    public GiftCardAnycardEntity update(
+            String id,
+            String cardNumber,
+            String serialNumber,
+            String pin,
+            AnycardType anycardType,
+            String balance,
+            Boolean needsRedeem
+    ) {
+        GiftCardAnycardEntity e = getOrThrow(id);
+        if (cardNumber == null || cardNumber.isBlank()) throw new IllegalArgumentException("cardNumber is required");
+        Objects.requireNonNull(anycardType, "anycardType");
+
+        String nextCardNumber = cardNumber.trim();
+        AnycardType nextType = anycardType;
+
+        repo.findByAnycardTypeAndCardNumber(nextType, nextCardNumber).ifPresent((dup) -> {
+            if (!dup.getId().equals(e.getId())) {
+                throw new IllegalArgumentException("Another anycard already exists for this type + cardNumber");
+            }
+        });
+
+        e.setCardNumber(nextCardNumber);
+        e.setSerialNumber(serialNumber == null ? null : serialNumber.trim());
+        e.setPin(pin == null ? null : pin.trim());
+        e.setAnycardType(nextType);
+        e.setBalance(balance == null ? null : balance.trim());
+        e.setNeedsRedeem(needsRedeem != null && needsRedeem);
+        return repo.save(e);
+    }
+
+    @Transactional
+    public void delete(String id) {
+        GiftCardAnycardEntity e = getOrThrow(id);
+        repo.delete(e);
+    }
+
+    @Transactional
     public GiftCardAnycardEntity upsertFromTaskResult(JsonNode result) {
         if (result == null || result.isNull()) {
             throw new IllegalArgumentException("Missing task result");
         }
 
         String cardNumber = text(result, "card_number");
+        String serialNumber = firstTextOrNull(result, "serial_number", "serialNumber");
         String pin = textOrNull(result, "PIN");
         String balance = textOrNull(result, "balance");
-        AnycardType anycardType = parseAnycardType(text(result, "card_type"));
+        AnycardType anycardType = AnycardType.fromString(text(result, "card_type"));
 
         GiftCardAnycardEntity e = repo.findByAnycardTypeAndCardNumber(anycardType, cardNumber).orElseGet(GiftCardAnycardEntity::new);
         e.setAnycardType(anycardType);
         e.setCardNumber(cardNumber);
+        e.setSerialNumber(serialNumber);
         e.setPin(pin);
         e.setBalance(balance);
+        if (e.getNeedsRedeem() == null) e.setNeedsRedeem(false);
         return repo.save(e);
-    }
-
-    private AnycardType parseAnycardType(String value) {
-        String normalized = value.trim().toUpperCase(Locale.ROOT);
-        if (normalized.equals("CELEBRATE")) return AnycardType.CELEBRATE;
-        if (normalized.equals("CELEBRATE CARD")) return AnycardType.CELEBRATE;
-        throw new IllegalArgumentException("Unknown anycard_type: " + value);
     }
 
     private String text(JsonNode obj, String key) {
@@ -76,5 +136,14 @@ public class AnycardService {
         if (node == null || node.isNull()) return null;
         String v = node.asText();
         return v == null || v.isBlank() ? null : v;
+    }
+
+    private String firstTextOrNull(JsonNode obj, String... keys) {
+        if (obj == null || obj.isNull()) return null;
+        for (String k : keys) {
+            String v = textOrNull(obj, k);
+            if (v != null) return v;
+        }
+        return null;
     }
 }

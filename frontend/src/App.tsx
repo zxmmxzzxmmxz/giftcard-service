@@ -6,6 +6,8 @@ import Login from "./pages/Login";
 import Templates from "./pages/Templates";
 import Cards from "./pages/Cards";
 import CardDetail from "./pages/CardDetail";
+import Anycards from "./pages/Anycards";
+import Tasks from "./pages/Tasks";
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
     const auth = getAuthHeader();
@@ -40,6 +42,8 @@ export default function App() {
                 <nav style={{ display: "flex", gap: 12 }}>
                     <Link to="/templates">Templates</Link>
                     <Link to="/cards">Cards</Link>
+                    <Link to="/anycards">Anycards</Link>
+                    <Link to="/tasks">Tasks</Link>
                 </nav>
                 <div style={{ marginLeft: "auto", display: "flex", gap: 12, alignItems: "center" }}>
                     <small style={{ opacity: 0.7 }}>{health}</small>
@@ -70,6 +74,22 @@ export default function App() {
                     element={
                         <RequireAuth>
                             <CardDetail />
+                        </RequireAuth>
+                    }
+                />
+                <Route
+                    path="/anycards"
+                    element={
+                        <RequireAuth>
+                            <Anycards />
+                        </RequireAuth>
+                    }
+                />
+                <Route
+                    path="/tasks"
+                    element={
+                        <RequireAuth>
+                            <Tasks />
                         </RequireAuth>
                     }
                 />

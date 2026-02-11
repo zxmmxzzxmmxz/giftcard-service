@@ -27,14 +27,29 @@ public class TaskController {
         this.service = service;
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public TaskDtos.TaskResponse create(@RequestBody @Valid TaskDtos.CreateTaskRequest req) {
+        return toResp(service.create(req));
+    }
+
+    @PostMapping("/create")
+    public TaskDtos.TaskResponse createAlias(@RequestBody @Valid TaskDtos.CreateTaskRequest req) {
         return toResp(service.create(req));
     }
 
     @GetMapping("/{id}")
     public TaskDtos.TaskResponse get(@PathVariable("id") String id) {
         return toResp(service.getOrThrow(id));
+    }
+
+    @GetMapping
+    public List<TaskDtos.TaskResponse> list() {
+        return service.listAll().stream().map(this::toResp).toList();
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") String id) {
+        service.deleteTask(id);
     }
 
     @GetMapping("/next")
