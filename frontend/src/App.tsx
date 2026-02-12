@@ -9,6 +9,7 @@ import CardDetail from "./pages/CardDetail";
 import Anycards from "./pages/Anycards";
 import Tasks from "./pages/Tasks";
 import WalmartGiftCards from "./pages/WalmartGiftCards";
+import VanillaGiftCards from "./pages/VanillaGiftCards";
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
     const auth = getAuthHeader();
@@ -45,6 +46,7 @@ export default function App() {
                     <Link to="/cards">Cards</Link>
                     <Link to="/anycards">Anycards</Link>
                     <Link to="/walmart-giftcards">Walmart</Link>
+                    <Link to="/vanilla-giftcards">Vanilla</Link>
                     <Link to="/tasks">Tasks</Link>
                 </nav>
                 <div style={{ marginLeft: "auto", display: "flex", gap: 12, alignItems: "center" }}>
@@ -92,6 +94,14 @@ export default function App() {
                     element={
                         <RequireAuth>
                             <WalmartGiftCards />
+                        </RequireAuth>
+                    }
+                />
+                <Route
+                    path="/vanilla-giftcards"
+                    element={
+                        <RequireAuth>
+                            <VanillaGiftCards />
                         </RequireAuth>
                     }
                 />

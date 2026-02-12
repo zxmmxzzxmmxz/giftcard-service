@@ -44,6 +44,18 @@ export type WalmartGiftCard = {
     updatedAt: string;
 };
 
+export type VanillaGiftCard = {
+    id: string;
+    cardNumber: string;
+    ccv?: string | null;
+    expiryDate?: string | null;
+    serialNumber?: string | null;
+    balance?: number | null;
+    needsRedeem: boolean;
+    createdAt: string;
+    updatedAt: string;
+};
+
 export type AutomationTask = {
     id: string;
     type: string;
@@ -53,4 +65,13 @@ export type AutomationTask = {
     lastError?: string | null;
     createdAt: string;
     updatedAt: string;
+};
+
+export type BarcodeDecodeResponse = {
+    rawText?: string | null;
+    serialNumber?: string | null;
+    usedOpenCv?: boolean;
+    attempts?: number;
+    tried?: string[];
+    error?: string | null;
 };

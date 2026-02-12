@@ -1,8 +1,11 @@
 import { getAuthHeader } from "./auth";
+import type { BarcodeDecodeResponse } from "./types";
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
     const headers = new Headers(init?.headers || {});
-    headers.set("Content-Type", "application/json");
+    // If sending FormData, let the browser set Content-Type (multipart boundary).
+    const isFormData = typeof FormData !== "undefined" && init?.body instanceof FormData;
+    if (!isFormData) headers.set("Content-Type", "application/json");
 
     const auth = getAuthHeader();
     if (auth) headers.set("Authorization", auth);
@@ -95,6 +98,20 @@ export const api = {
     walmartEmailListenerStatus: () => request<any>("/api/walmart-giftcards/email-listener/status"),
     walmartEmailListenerStart: () => request<any>("/api/walmart-giftcards/email-listener/start", { method: "POST" }),
     walmartEmailListenerStop: () => request<any>("/api/walmart-giftcards/email-listener/stop", { method: "POST" }),
+
+    listVanillaGiftCards: () => request<any[]>("/api/vanilla-giftcards"),
+    createVanillaGiftCard: (payload: any) =>
+        request<any>("/api/vanilla-giftcards", { method: "POST", body: JSON.stringify(payload) }),
+    updateVanillaGiftCard: (id: string, payload: any) =>
+        request<any>(`/api/vanilla-giftcards/${id}`, { method: "PUT", body: JSON.stringify(payload) }),
+    deleteVanillaGiftCard: (id: string) =>
+        request<void>(`/api/vanilla-giftcards/${id}`, { method: "DELETE" }),
+
+    decodeCode128: (file: File) => {
+        const form = new FormData();
+        form.set("file", file);
+        return request<BarcodeDecodeResponse>(`/api/barcode/decode/code128`, { method: "POST", body: form });
+    },
 
     createTask: (payload: any) =>
         request<any>("/api/tasks/create", { method: "POST", body: JSON.stringify(payload) }),
